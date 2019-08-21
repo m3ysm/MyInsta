@@ -14,8 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Data.RetrofitClient;
-import com.meysam.myinsta.HomeActivity;
+import com.meysam.myinsta.Activities.HomeActivity;
 import com.meysam.myinsta.Models.JsonResponseModel;
 import com.meysam.myinsta.R;
 
@@ -81,6 +82,7 @@ public class LoginFragment extends Fragment {
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Welcome", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), HomeActivity.class));
+                            MySharedPreference.getInstance(getContext()).setIsLogin(true);
                             getActivity().finish();
                         }else {
                             switch (response.code()){

@@ -1,8 +1,10 @@
-package com.meysam.myinsta;
+package com.meysam.myinsta.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.meysam.myinsta.R;
 
 public class HomeActivity extends AppCompatActivity {
 

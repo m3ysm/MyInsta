@@ -1,20 +1,13 @@
-package com.meysam.myinsta;
+package com.meysam.myinsta.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.meysam.myinsta.Data.RetrofitClient;
+import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Fragments.LoginFragment;
-import com.meysam.myinsta.Models.JsonResponseModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.meysam.myinsta.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (MySharedPreference.getInstance(this).getIsLogin()){
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            MainActivity.this.finish();
+        }
 
         getSupportFragmentManager().beginTransaction().add(R.id.main_container , new LoginFragment()).commit();
 
