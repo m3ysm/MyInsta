@@ -9,27 +9,38 @@ public class MySharedPreference {
     private SharedPreferences.Editor editor;
     private static MySharedPreference instance;
 
-    public static MySharedPreference getInstance(Context context){
+    public static MySharedPreference getInstance(Context context) {
         if (instance == null)
             instance = new MySharedPreference(context);
         return instance;
     }
 
 
+    private MySharedPreference(Context context) {
 
-   private MySharedPreference(Context context){
+        sp = context.getSharedPreferences("myapp", Context.MODE_PRIVATE);
+        editor = sp.edit();
+    }
 
-       sp = context.getSharedPreferences("myapp",Context.MODE_PRIVATE);
-       editor = sp.edit();
-   }
+    public void setIsLogin() {
 
-   public void setIsLogin(boolean isLogin){
+        editor.putBoolean("isLogin", true).apply();
+    }
 
-        editor.putBoolean("isLogin",isLogin).apply();
-   }
+    public boolean getIsLogin() {
+        return sp.getBoolean("isLogin", false);
+    }
 
-    public boolean getIsLogin(){
-        return sp.getBoolean("isLogin",false);
-   }
+    public void setUser(String username) {
+        editor.putString("username", username).apply();
+    }
+
+    public String getUser() {
+        return sp.getString("username", "");
+    }
+
+    public void clearSharedPreference() {
+        editor.clear().commit();
+    }
 
 }

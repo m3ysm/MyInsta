@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/b2"
     tools:context=".Fragments.RegisterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:layout_marginRight="170dp"
+        android:textSize="35sp"
+        android:textColor="@android:color/white"
+        android:text="SIGN UP"
+        android:fontFamily="sans-serif-condensed-medium"
+        app:layout_constraintBottom_toTopOf="@id/username_signup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:id="@+id/user_img"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_user"
+        app:layout_constraintBottom_toBottomOf="@id/username_signup"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/username_signup"
+        app:layout_constraintTop_toTopOf="@id/username_signup" />
+
+
+    <EditText
+        android:id="@+id/username_signup"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/edittext_username"
+        android:hint="Username"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/pass_signup"
+        app:layout_constraintLeft_toRightOf="@id/user_img"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <ImageView
+        android:id="@+id/pass_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_lock"
+        app:layout_constraintBottom_toBottomOf="@id/pass_signup"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/pass_signup"
+        app:layout_constraintTop_toTopOf="@id/pass_signup" />
+
+
+    <EditText
+        android:id="@+id/pass_signup"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_username"
+        android:hint="Password"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/passconfirm_signup"
+        app:layout_constraintLeft_toRightOf="@id/pass_img"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_signup"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <EditText
+        android:id="@+id/passconfirm_signup"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_username"
+        android:hint="Confirm Password"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/signup_radiogroupbtn"
+        app:layout_constraintLeft_toRightOf="@id/pass_img"
+        app:layout_constraintRight_toRightOf="@id/pass_signup"
+        app:layout_constraintTop_toBottomOf="@id/pass_signup"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <RadioGroup
+        android:id="@+id/signup_radiogroupbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toTopOf="@id/signup_btn"
+        app:layout_constraintLeft_toLeftOf="@id/passconfirm_signup"
+        app:layout_constraintRight_toRightOf="@id/passconfirm_signup"
+        app:layout_constraintTop_toBottomOf="@id/passconfirm_signup">
+
+
+        <RadioButton
+            android:id="@+id/rb_male"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/rb_female"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:text="Female" />
+    </RadioGroup>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signup_btn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:text="SIGN UP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signup_radiogroupbtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

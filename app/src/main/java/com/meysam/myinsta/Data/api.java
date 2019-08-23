@@ -14,7 +14,7 @@ public interface api {
 
     @FormUrlEncoded
     @POST("reg.php")
-    Call<JsonResponseModel> registerUser(@Field("name") String name,
+    Call<JsonResponseModel> registerUser(@Field("gender") String gender,
                                          @Field("username") String username,
                                          @Field("password") String password);
 

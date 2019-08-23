@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".Activities.HomeActivity">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/home_btn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="Sign Out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:text="Welcom"
         app:layout_constraintTop_toTopOf="parent"

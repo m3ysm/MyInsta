@@ -3,20 +3,19 @@ package com.meysam.myinsta.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.button.MaterialButton;
+import com.meysam.myinsta.Activities.HomeActivity;
 import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Data.RetrofitClient;
-import com.meysam.myinsta.Activities.HomeActivity;
 import com.meysam.myinsta.Models.JsonResponseModel;
 import com.meysam.myinsta.R;
 
@@ -29,8 +28,8 @@ import retrofit2.Response;
  */
 public class LoginFragment extends Fragment {
 
-    private MaterialButton login,signup;
-    private EditText user,pass;
+    private MaterialButton login, signup;
+    private EditText user, pass;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -47,10 +46,10 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
-    private void init(View v){
+    private void init(View v) {
 
-        user=v.findViewById(R.id.username_login);
-        pass=v.findViewById(R.id.pass_login);
+        user = v.findViewById(R.id.username_login);
+        pass = v.findViewById(R.id.pass_login);
 
         login = v.findViewById(R.id.login_btn);
         signup = v.findViewById(R.id.signup_btn);
@@ -58,34 +57,42 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void onClicks(){
+    private void onClicks() {
 
-        login.setOnClickListener(v->{
+        login.setOnClickListener(v -> {
             String u = user.getText().toString();
             String p = pass.getText().toString();
-            if (u.isEmpty() || p.isEmpty()){
+            if (u.isEmpty() || p.isEmpty()) {
                 Toast.makeText(getContext(), "Please Complete The Fields", Toast.LENGTH_SHORT).show();
-            }else {
-                doLogin(u,p);
+            } else {
+                doLogin(u, p);
             }
+        });
+
+        signup.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
+                    .add(R.id.main_container, new RegisterFragment())
+                    .addToBackStack(null).commit();
         });
     }
 
     private void doLogin(String username, String password) {
 
         RetrofitClient.getInstance().getApi()
-                .loginUser(username,password)
+                .loginUser(username, password)
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
 
-                        if (response.isSuccessful()){
-                            Toast.makeText(getContext(), "Welcome", Toast.LENGTH_SHORT).show();
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "Welcome"+username, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), HomeActivity.class));
-                            MySharedPreference.getInstance(getContext()).setIsLogin(true);
+                            MySharedPreference.getInstance(getContext()).setIsLogin();
+                            MySharedPreference.getInstance(getContext()).setUser(username);
                             getActivity().finish();
-                        }else {
-                            switch (response.code()){
+                        } else {
+                            switch (response.code()) {
                                 case 400:
                                     Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
                                     user.setText("");
