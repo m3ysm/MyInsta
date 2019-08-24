@@ -34,6 +34,7 @@ public class RegisterFragment extends Fragment {
     EditText username, password, confirm;
     RadioGroup radioGroup;
     RadioButton rb;
+    String gender;
     public RegisterFragment() {
         // Required empty public constructor
     }
@@ -64,10 +65,12 @@ public class RegisterFragment extends Fragment {
             String cp = confirm.getText().toString();
 
            int rbid = radioGroup.getCheckedRadioButtonId();
-           View radiobotton = radioGroup.findViewById(rbid);
-           int radioId = radioGroup.indexOfChild(radiobotton);
-            rb = (RadioButton) radioGroup.getChildAt(radioId);
-           String gender = rb.getText().toString();
+           if (rbid != -1) {
+               View radiobotton = radioGroup.findViewById(rbid);
+               int radioId = radioGroup.indexOfChild(radiobotton);
+               rb = (RadioButton) radioGroup.getChildAt(radioId);
+               gender = rb.getText().toString();
+           }
 
             if (u.isEmpty() || p.isEmpty()) {
                 Toast.makeText(getContext(), "Please Complete The Fields", Toast.LENGTH_SHORT).show();
@@ -82,15 +85,15 @@ public class RegisterFragment extends Fragment {
 
     private void doSignup(String gender, String username, String password) {
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.getInstance(getContext()).getApi()
                 .registerUser(gender, username, password)
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "Welcome"+username, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Welcome "+username, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), HomeActivity.class));
-                            MySharedPreference.getInstance(getContext()).setIsLogin();
+                            MySharedPreference.getInstance(getContext()).setIsLogin(true);
                             MySharedPreference.getInstance(getContext()).setUser(username);
                             getActivity().finish();
                         } else {

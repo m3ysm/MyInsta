@@ -22,9 +22,9 @@ public class MySharedPreference {
         editor = sp.edit();
     }
 
-    public void setIsLogin() {
+    public void setIsLogin(boolean isLogin ) {
 
-        editor.putBoolean("isLogin", true).apply();
+        editor.putBoolean("isLogin", isLogin).apply();
     }
 
     public boolean getIsLogin() {
@@ -41,6 +41,13 @@ public class MySharedPreference {
 
     public void clearSharedPreference() {
         editor.clear().commit();
+    }
+
+    public void setWriteExternal(){
+        editor.putBoolean("WriteExternal", true).apply();
+    }
+    public boolean getWriteExternal(){
+        return sp.getBoolean("WriteExternal",false);
     }
 
 }

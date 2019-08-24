@@ -79,16 +79,16 @@ public class LoginFragment extends Fragment {
 
     private void doLogin(String username, String password) {
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.getInstance(getContext()).getApi()
                 .loginUser(username, password)
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
 
                         if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "Welcome"+username, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Welcome "+username, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), HomeActivity.class));
-                            MySharedPreference.getInstance(getContext()).setIsLogin();
+                            MySharedPreference.getInstance(getContext()).setIsLogin(true);
                             MySharedPreference.getInstance(getContext()).setUser(username);
                             getActivity().finish();
                         } else {

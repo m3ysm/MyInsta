@@ -1,5 +1,9 @@
 package com.meysam.myinsta.Data;
 
+import android.content.Context;
+
+import com.meysam.myinsta.R;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -8,16 +12,16 @@ public class RetrofitClient {
     private static RetrofitClient instance;
     private Retrofit retrofit;
 
-    public static RetrofitClient getInstance() {
+    public static RetrofitClient getInstance(Context context) {
         if (instance == null) {
-            instance = new RetrofitClient();
+            instance = new RetrofitClient(context);
         }
         return instance;
     }
 
 
-    private RetrofitClient() {
-        retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.3/advanced/")
+    private RetrofitClient(Context context) {
+        retrofit = new Retrofit.Builder().baseUrl(context.getString(R.string.server_address))
                 .addConverterFactory(GsonConverterFactory.create()).build();
     }
 
