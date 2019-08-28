@@ -15,7 +15,6 @@ import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
-import com.meysam.myinsta.Classes.NewPostActivity;
 import com.meysam.myinsta.R;
 
 public class HomeActivity extends AppCompatActivity {

@@ -18,6 +18,11 @@ public interface api {
                                          @Field("username") String username,
                                          @Field("password") String password);
 
+    @FormUrlEncoded
+    @POST("newpost.php")
+    Call<JsonResponseModel> newPost(@Field("image") String image,
+                                    @Field("picname") String picname);
+
     @GET("login.php")
     Call<JsonResponseModel> loginUser(@Query("username") String user,
                                       @Query("password") String pass);
