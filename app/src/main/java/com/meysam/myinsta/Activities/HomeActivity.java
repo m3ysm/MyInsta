@@ -6,21 +6,17 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
-import com.meysam.myinsta.Classes.newPostDialog;
+import com.meysam.myinsta.Classes.NewPostActivity;
 import com.meysam.myinsta.R;
-
-import java.io.File;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -83,6 +79,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void gotoDialog() {
+        startActivity(new Intent(HomeActivity.this, NewPostActivity.class));
     }
 
     private int checkPermission(){
