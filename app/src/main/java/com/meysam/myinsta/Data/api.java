@@ -20,7 +20,9 @@ public interface api {
 
     @FormUrlEncoded
     @POST("newpost.php")
-    Call<JsonResponseModel> newPost(@Field("image") String image,
+    Call<JsonResponseModel> newPost(@Field("id") String username,
+                                    @Field("des") String description,
+                                    @Field("image") String image,
                                     @Field("picname") String picname);
 
     @GET("login.php")

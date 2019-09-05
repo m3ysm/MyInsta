@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.button.MaterialButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Data.RetrofitClient;
 import com.meysam.myinsta.Models.JsonResponseModel;
@@ -35,13 +37,46 @@ public class NewPostActivity extends AppCompatActivity {
 
     private String path;
     private Bitmap bitmap;
+    private MaterialButton save, back, imageSelect;
+    private EditText des;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_newpost);
 
-        findViewById(R.id.newpost_btn).setOnClickListener(v -> {
+        init();
+
+
+    }
+
+    private void init() {
+        imageSelect = findViewById(R.id.newpost_btn);
+        save = findViewById(R.id.newPost_save);
+        back = findViewById(R.id.newPost_back);
+        des = findViewById(R.id.newPost_des);
+
+        onClicks();
+
+    }
+
+    private void onClicks() {
+        save.setOnClickListener(v -> {
+            String d = des.getText().toString();
+            if (d.isEmpty()) {
+                Toast.makeText(this, "Complete the form", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            sendNewPost(d);
+        });
+
+
+        back.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
+
+        imageSelect.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(NewPostActivity.this);
             builder.setTitle("Select Image");
             builder.setMessage("Choos an image from:");
@@ -59,6 +94,7 @@ public class NewPostActivity extends AppCompatActivity {
         });
     }
 
+
     private String toBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream);
@@ -70,9 +106,9 @@ public class NewPostActivity extends AppCompatActivity {
     private void selectFromCamera() {
 
         Intent intent = new Intent();
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.setAction(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.android.fileprovider", createFile()));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.meysam.myinsta.fileprovider", createFile()));
             startActivityForResult(intent, 02);
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,24 +130,36 @@ public class NewPostActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select an Image"), 01);
     }
 
-    private void sendNewPost(){
+    private void sendNewPost(String des) {
         String picname = new SimpleDateFormat("_yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
+        String username = MySharedPreference.getInstance(this).getUser();
 
         RetrofitClient.getInstance(NewPostActivity.this).getApi()
-                .newPost(toBase64(bitmap),MySharedPreference.getInstance(this).getUser() + picname)
+                .newPost(username, des , toBase64(bitmap) ,username + picname)
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(NewPostActivity.this, "error1", Toast.LENGTH_SHORT).show();
+//                        if (response.isSuccessful()) {
+//                            Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(NewPostActivity.this, "error", Toast.LENGTH_SHORT).show();
+//                        }
+                        switch (response.code()){
+                            case 201:
+                                Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
+                            case 406:
+                                Toast.makeText(NewPostActivity.this, "error406", Toast.LENGTH_SHORT).show();
+                            case 407:
+                                Toast.makeText(NewPostActivity.this, "error407", Toast.LENGTH_SHORT).show();
+
                         }
                     }
 
+
+
                     @Override
                     public void onFailure(Call<JsonResponseModel> call, Throwable t) {
-                        Toast.makeText(NewPostActivity.this, "error2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NewPostActivity.this, "failed", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -127,7 +175,6 @@ public class NewPostActivity extends AppCompatActivity {
                     ((ImageView) findViewById(R.id.newpost_img)).setImageURI(data.getData());
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                        sendNewPost();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -140,12 +187,10 @@ public class NewPostActivity extends AppCompatActivity {
                         a.dismiss());
                 builder.show();
 
-
             } else if (requestCode == 02) {
                 ((ImageView) findViewById(R.id.newpost_img)).setImageURI(Uri.parse(path));
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(path));
-                    sendNewPost();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

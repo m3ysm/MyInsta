@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.R;
@@ -28,6 +29,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         init();
+        SimpleDraweeView image = findViewById(R.id.home_image);
+        image.setImageURI(Uri.parse("https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/fc/3034007-inline-i-applelogo.jpg"));
     }
 
     private void init(){
