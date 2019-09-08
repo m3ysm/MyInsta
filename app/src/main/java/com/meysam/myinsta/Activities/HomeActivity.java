@@ -3,6 +3,8 @@ package com.meysam.myinsta.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -16,12 +18,20 @@ import android.widget.Button;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
+import com.meysam.myinsta.Classes.PostAdapter;
+import com.meysam.myinsta.Data.RetrofitClient;
+import com.meysam.myinsta.Models.postModel;
 import com.meysam.myinsta.R;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
     Button btn;
     private FloatingActionButton fab;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +39,37 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         init();
-        SimpleDraweeView image = findViewById(R.id.home_image);
-        image.setImageURI(Uri.parse("https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/fc/3034007-inline-i-applelogo.jpg"));
+        getData();
     }
 
     private void init(){
         fab =findViewById(R.id.home_fab);
         btn = findViewById(R.id.home_btn);
+        recyclerView = findViewById(R.id.home_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         onClicks();
+        getData();
+
+    }
+
+    private void getData(){
+        RetrofitClient.getInstance(this).getApi().getPost()
+                .enqueue(new Callback<postModel>() {
+                    @Override
+                    public void onResponse(Call<postModel> call, Response<postModel> response) {
+                        if (response.isSuccessful()){
+                            PostAdapter adapter = new PostAdapter(HomeActivity.this,response.body().getData());
+                            recyclerView.setAdapter(adapter);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<postModel> call, Throwable t) {
+
+                    }
+                });
     }
 
     private void onClicks(){

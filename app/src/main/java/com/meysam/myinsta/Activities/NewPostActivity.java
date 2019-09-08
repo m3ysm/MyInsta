@@ -155,8 +155,6 @@ public class NewPostActivity extends AppCompatActivity {
                         }
                     }
 
-
-
                     @Override
                     public void onFailure(Call<JsonResponseModel> call, Throwable t) {
                         Toast.makeText(NewPostActivity.this, "failed", Toast.LENGTH_SHORT).show();

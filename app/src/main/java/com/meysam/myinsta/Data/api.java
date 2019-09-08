@@ -1,6 +1,7 @@
 package com.meysam.myinsta.Data;
 
 import com.meysam.myinsta.Models.JsonResponseModel;
+import com.meysam.myinsta.Models.postModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -28,4 +29,7 @@ public interface api {
     @GET("login.php")
     Call<JsonResponseModel> loginUser(@Query("username") String user,
                                       @Query("password") String pass);
+
+    @GET("getpost.php")
+    Call<postModel> getPost();
 }
