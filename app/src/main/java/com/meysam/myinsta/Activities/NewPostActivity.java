@@ -21,10 +21,13 @@ import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Data.RetrofitClient;
 import com.meysam.myinsta.Models.JsonResponseModel;
 import com.meysam.myinsta.R;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -62,12 +65,13 @@ public class NewPostActivity extends AppCompatActivity {
 
     private void onClicks() {
         save.setOnClickListener(v -> {
-            String d = des.getText().toString();
-            if (d.isEmpty()) {
-                Toast.makeText(this, "Complete the form", Toast.LENGTH_SHORT).show();
-                return;
+            try {
+                byte[] d = des.getText().toString().getBytes("UTF-8");
+                sendNewPost(Base64.encodeToString(d, Base64.DEFAULT));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
-            sendNewPost(d);
+
         });
 
 
@@ -93,7 +97,6 @@ public class NewPostActivity extends AppCompatActivity {
             builder.show();
         });
     }
-
 
     private String toBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -135,7 +138,7 @@ public class NewPostActivity extends AppCompatActivity {
         String username = MySharedPreference.getInstance(this).getUser();
 
         RetrofitClient.getInstance(NewPostActivity.this).getApi()
-                .newPost(username, des , toBase64(bitmap) ,username + picname)
+                .newPost(username, des, toBase64(bitmap), username + picname)
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
@@ -144,14 +147,13 @@ public class NewPostActivity extends AppCompatActivity {
 //                        } else {
 //                            Toast.makeText(NewPostActivity.this, "error", Toast.LENGTH_SHORT).show();
 //                        }
-                        switch (response.code()){
+                        switch (response.code()) {
                             case 201:
                                 Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
                             case 406:
                                 Toast.makeText(NewPostActivity.this, "error406", Toast.LENGTH_SHORT).show();
                             case 407:
                                 Toast.makeText(NewPostActivity.this, "error407", Toast.LENGTH_SHORT).show();
-
                         }
                     }
 
@@ -170,10 +172,18 @@ public class NewPostActivity extends AppCompatActivity {
                 builder.setTitle("ALLERT");
                 builder.setMessage("Are you sure?");
                 builder.setPositiveButton("Yes", (a, b) -> {
-                    ((ImageView) findViewById(R.id.newpost_img)).setImageURI(data.getData());
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    } catch (IOException e) {
+                        CropImage.activity(data.getData())
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .setAspectRatio(1, 1)
+                                .setAutoZoomEnabled(true)
+                                .setAllowRotation(true)
+                                .setAllowFlipping(true)
+                                .setActivityTitle("Crop Image")
+                                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                                .setFixAspectRatio(true)
+                                .start(this);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
@@ -192,6 +202,22 @@ public class NewPostActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+                    ((ImageView) findViewById(R.id.newpost_img)).setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }

@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.meysam.myinsta.Classes.MySharedPreference;
 import com.meysam.myinsta.Classes.PostAdapter;
 import com.meysam.myinsta.Data.RetrofitClient;
+import com.meysam.myinsta.Models.JsonResponseModel;
 import com.meysam.myinsta.Models.postModel;
 import com.meysam.myinsta.R;
 
@@ -39,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         init();
-        getData();
     }
 
     private void init(){
@@ -49,9 +51,45 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         onClicks();
-        getData();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+        verify();
+    }
+
+    private void verify(){
+        RetrofitClient.getInstance(this).getApi()
+                .verify(MySharedPreference.getInstance(this).getUser(),"android")
+                .enqueue(new Callback<JsonResponseModel>() {
+                    @Override
+                    public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
+                        if (response.isSuccessful()){
+
+                            PackageInfo info = null;
+                            try {
+                                info = getPackageManager().getPackageInfo(getPackageName(),0);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            int myVersion = info.versionCode;
+                            if (myVersion < Integer.parseInt(response.body().getMassage()))
+                            Toast.makeText(HomeActivity.this, "New Version is Available", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonResponseModel> call, Throwable t) {
+
+                    }
+                });
+
+
+    }
+
 
     private void getData(){
         RetrofitClient.getInstance(this).getApi().getPost()

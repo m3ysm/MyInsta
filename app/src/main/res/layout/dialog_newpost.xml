@@ -6,7 +6,7 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    <EditText
+    <androidx.emoji.widget.EmojiEditText
         android:id="@+id/newPost_des"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"

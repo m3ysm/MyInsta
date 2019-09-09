@@ -2,6 +2,7 @@ package com.meysam.myinsta.Classes;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         postItem item = list.get(position);
-        holder.des.setText(item.getDes());
+        holder.des.setText(new String(Base64.decode(item.getDes(),Base64.DEFAULT)));
         holder.user.setText(item.getUser_id());
         holder.pic.setImageURI(Uri.parse(context.getString(R.string.image_address,item.getImage())));
 

@@ -26,6 +26,12 @@ public interface api {
                                     @Field("image") String image,
                                     @Field("picname") String picname);
 
+    @FormUrlEncoded
+    @POST("verify.php")
+    Call<JsonResponseModel> verify(@Field("username") String username,
+                                   @Field("os") String os);
+
+
     @GET("login.php")
     Call<JsonResponseModel> loginUser(@Query("username") String user,
                                       @Query("password") String pass);

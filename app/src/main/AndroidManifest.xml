@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <meta-data android:name="fontProviderRequests" android:value="Noto Color Emoji Compat"/>
+
     <application
         android:name=".Classes.MyApplication"
         android:largeHeap="true"
@@ -18,6 +20,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".Activities.HomeActivity"></activity>
         <activity android:name=".Activities.MainActivity">
             <intent-filter>

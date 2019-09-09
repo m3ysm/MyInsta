@@ -38,7 +38,7 @@
             app:layout_constraintTop_toBottomOf="@id/row_post_circle"
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
-        <TextView
+        <androidx.emoji.widget.EmojiTextView
             android:id="@+id/row_post_des"
             android:textColor="@android:color/black"
             style="@style/TextAppearance.AppCompat.Medium"
