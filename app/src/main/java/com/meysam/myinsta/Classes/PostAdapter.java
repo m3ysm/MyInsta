@@ -41,7 +41,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.des.setText(new String(Base64.decode(item.getDes(),Base64.DEFAULT)));
         holder.user.setText(item.getUser_id());
         holder.pic.setImageURI(Uri.parse(context.getString(R.string.image_address,item.getImage())));
-
+        holder.date.setText(item.getDate());
+        holder.id.setText(item.getId());
+        holder.commentCount.setText(item.getComments()+"");
 
     }
 
@@ -52,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView des , user;
+        private TextView des , user,date,id,commentCount;
         private SimpleDraweeView pic;
 
         public ViewHolder(@NonNull View v) {
@@ -61,6 +63,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             des = v.findViewById(R.id.row_post_des);
             user = v.findViewById(R.id.row_post_user);
             pic = v.findViewById(R.id.row_post_img);
+            date = v.findViewById(R.id.row_post_date);
+            id = v.findViewById(R.id.row_post_id);
+            commentCount = v.findViewById(R.id.row_post_comment_count);
         }
     }
 
