@@ -39,6 +39,7 @@ import retrofit2.Response;
 public class NewPostActivity extends AppCompatActivity {
 
     private String path;
+    private Uri path2;
     private Bitmap bitmap;
     private MaterialButton save, back, imageSelect;
     private EditText des;
@@ -123,6 +124,7 @@ public class NewPostActivity extends AppCompatActivity {
         File a = File.createTempFile(MySharedPreference.getInstance(this).getUser() + date, ".jpg",
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES));
         path = a.getAbsolutePath();
+        path2 = Uri.fromFile(a);
         return a;
     }
 
@@ -196,9 +198,9 @@ public class NewPostActivity extends AppCompatActivity {
                 builder.show();
 
             } else if (requestCode == 02) {
-                ((ImageView) findViewById(R.id.newpost_img)).setImageURI(Uri.parse(path));
+                ((ImageView) findViewById(R.id.newpost_img)).setImageURI(path2);
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(path));
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path2);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

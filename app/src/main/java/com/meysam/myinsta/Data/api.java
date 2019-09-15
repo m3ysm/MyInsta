@@ -31,11 +31,20 @@ public interface api {
     Call<JsonResponseModel> verify(@Field("username") String username,
                                    @Field("os") String os);
 
+    @FormUrlEncoded
+    @POST("postComment.php")
+    Call<JsonResponseModel> postComment(@Field("username") String username,
+                                        @Field("comment") String comment,
+                                        @Field("postid") String postid);
+
 
     @GET("login.php")
     Call<JsonResponseModel> loginUser(@Query("username") String user,
                                       @Query("password") String pass);
 
-    @GET("getpost.php")
+    @GET("getposts.php")
     Call<postModel> getPost();
+
+    @GET("getcomments.php")
+    Call<postModel> getComments(@Field("postid") String postid);
 }

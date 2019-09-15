@@ -1,17 +1,20 @@
 package com.meysam.myinsta.Classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.meysam.myinsta.Activities.CommentsActivity;
 import com.meysam.myinsta.Models.postItem;
 import com.meysam.myinsta.R;
 
@@ -43,7 +46,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.pic.setImageURI(Uri.parse(context.getString(R.string.image_address,item.getImage())));
         holder.date.setText(item.getDate());
         holder.id.setText(item.getId());
-        holder.commentCount.setText(item.getComments()+"");
+        holder.commentCount.setText(item.getCommentCount()+"");
+        holder.comments.setOnClickListener(v->{
+            Intent intent = new Intent(context, CommentsActivity.class);
+            intent.putExtra("postid",item.getId());
+            context.startActivity(intent);
+        });
 
     }
 
@@ -56,6 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         private TextView des , user,date,id,commentCount;
         private SimpleDraweeView pic;
+        private ImageView comments;
 
         public ViewHolder(@NonNull View v) {
             super(v);
@@ -66,6 +75,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             date = v.findViewById(R.id.row_post_date);
             id = v.findViewById(R.id.row_post_id);
             commentCount = v.findViewById(R.id.row_post_comment_count);
+            comments = v.findViewById(R.id.row_post_comment);
         }
     }
 

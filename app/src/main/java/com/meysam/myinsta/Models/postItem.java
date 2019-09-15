@@ -7,10 +7,16 @@ public class postItem {
     private String des;
     private String image;
     private String date;
-    private String comments;
+    private String comment;
+    private String commentCount;
 
-    public String getComments() {
-        return comments;
+
+    public String getCommentCount() {
+        return commentCount;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public String getId() {
