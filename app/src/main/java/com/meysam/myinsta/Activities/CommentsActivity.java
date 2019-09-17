@@ -48,8 +48,8 @@ public class CommentsActivity extends AppCompatActivity {
         send = findViewById(R.id.comments_send);
         comment = findViewById(R.id.comments_comment);
 
-        postid = getIntent().getExtras().getString("postid","0");
-        if (postid.isEmpty()|| postid.equals(0)) {
+        postid = getIntent().getExtras().getString("postid", "0");
+        if (postid.isEmpty() || postid.equals(0)) {
             Toast.makeText(this, "Error,Try Again!", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
@@ -59,22 +59,21 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void onClicks(){
+    private void onClicks() {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String c =comment.getText().toString();
-                if (!c.isEmpty()){
+                String c = comment.getText().toString();
+                if (!c.isEmpty()) {
                     RetrofitClient.getInstance(CommentsActivity.this).getApi()
-                            .postComment(MySharedPreference.getInstance(CommentsActivity.this).getUser(),c,postid)
+                            .postComment(MySharedPreference.getInstance(CommentsActivity.this).getUser(), c, postid)
                             .enqueue(new Callback<JsonResponseModel>() {
                                 @Override
                                 public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
-                                    if (response.isSuccessful()){
+                                    if (response.isSuccessful()) {
                                         comment.setText("");
                                         getData();
-
-                                    }else {
+                                    } else {
                                         Toast.makeText(CommentsActivity.this, "Error,Try Again!", Toast.LENGTH_SHORT).show();
                                     }
 
@@ -82,8 +81,8 @@ public class CommentsActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<JsonResponseModel> call, Throwable t) {
-                                    if (postid.isEmpty()|| postid.equals(0)) {
-                                        Toast.makeText(CommentsActivity.this, "Error,Try Again!", Toast.LENGTH_SHORT).show();
+                                    if (postid.isEmpty() || postid.equals(0)) {
+                                        Toast.makeText(CommentsActivity.this, "failed", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -93,30 +92,26 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void getData(){
+    private void getData() {
 
         RetrofitClient.getInstance(this).getApi().getComments(postid)
                 .enqueue(new Callback<postModel>() {
                     @Override
                     public void onResponse(Call<postModel> call, Response<postModel> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             adapter = new CommentAdapter(response.body().getData());
                             recyclerView.setAdapter(adapter);
-
-
-                        }else {
-                            if (postid.isEmpty()|| postid.equals(0)) {
+                        } else {
+                            if (postid.isEmpty() || postid.equals(0)) {
                                 Toast.makeText(CommentsActivity.this, "Error,Try Again!", Toast.LENGTH_SHORT).show();
                                 onBackPressed();
                             }
                         }
-
                     }
-
                     @Override
                     public void onFailure(Call<postModel> call, Throwable t) {
-                        if (postid.isEmpty()|| postid.equals(0)) {
-                            Toast.makeText(CommentsActivity.this, "Error,Try Again!", Toast.LENGTH_SHORT).show();
+                        if (postid.isEmpty() || postid.equals(0)) {
+                            Toast.makeText(CommentsActivity.this, "failed", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         }
                     }

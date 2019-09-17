@@ -84,7 +84,7 @@ public class NewPostActivity extends AppCompatActivity {
         imageSelect.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(NewPostActivity.this);
             builder.setTitle("Select Image");
-            builder.setMessage("Choos an image from:");
+            builder.setMessage("Choose an image from:");
             builder.setPositiveButton("Camera", (a, b) -> {
                 selectFromCamera();
                 a.dismiss();
@@ -123,7 +123,7 @@ public class NewPostActivity extends AppCompatActivity {
         String date = new SimpleDateFormat("_yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         File a = File.createTempFile(MySharedPreference.getInstance(this).getUser() + date, ".jpg",
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES));
-        path = a.getAbsolutePath();
+        // path = a.getAbsolutePath();
         path2 = Uri.fromFile(a);
         return a;
     }
@@ -144,18 +144,11 @@ public class NewPostActivity extends AppCompatActivity {
                 .enqueue(new Callback<JsonResponseModel>() {
                     @Override
                     public void onResponse(Call<JsonResponseModel> call, Response<JsonResponseModel> response) {
-//                        if (response.isSuccessful()) {
-//                            Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(NewPostActivity.this, "error", Toast.LENGTH_SHORT).show();
-//                        }
-                        switch (response.code()) {
-                            case 201:
-                                Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
-                            case 406:
-                                Toast.makeText(NewPostActivity.this, "error406", Toast.LENGTH_SHORT).show();
-                            case 407:
-                                Toast.makeText(NewPostActivity.this, "error407", Toast.LENGTH_SHORT).show();
+                        if (response.isSuccessful()) {
+                            Toast.makeText(NewPostActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(NewPostActivity.this, "Error Try Again!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -171,7 +164,7 @@ public class NewPostActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (data != null && requestCode == 01) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(NewPostActivity.this);
-                builder.setTitle("ALLERT");
+                builder.setTitle("ALERT");
                 builder.setMessage("Are you sure?");
                 builder.setPositiveButton("Yes", (a, b) -> {
                     try {

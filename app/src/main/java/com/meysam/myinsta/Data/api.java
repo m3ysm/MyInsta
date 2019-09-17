@@ -46,5 +46,5 @@ public interface api {
     Call<postModel> getPost();
 
     @GET("getcomments.php")
-    Call<postModel> getComments(@Field("postid") String postid);
+    Call<postModel> getComments(@Query("postid") String postid);
 }

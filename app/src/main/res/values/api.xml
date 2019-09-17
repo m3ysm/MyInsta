@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="server_address">http://192.168.1.3/advanced/</string>
-    <string name="image_address">http://192.168.1.3/advanced/images/%s.jpg</string>
+    <string name="server_address">http://192.168.1.2/advanced/</string>
+    <string name="image_address">http://192.168.1.2/advanced/images/%s.jpg</string>
 
 </resources>
